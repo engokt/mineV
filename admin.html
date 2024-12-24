@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      background-image: url('/img/bg.avif');
+      background-size: cover;
+      background-repeat: no-repeat;
+      color: #f7a204;
+    }
+    h2 {
+      color: #f7a204;
+    }
+    .container {
+      margin-top: 30px;
+      background-color: #11111007;
+    }
+    .logout-btn {
+      float: right;
+    }
+    table {
+      text-align: center;
+    }
+    th {
+      background-color: #ffae0007;
+      color: #f7a204;
+    }
+    .message-box {
+      margin-top: 20px;
+    }
+    .user-details {
+      margin-top: 20px;
+      padding: 20px;
+      background-color: #ffffff10;
+      color: #fff;
+    }
+  </style>
+</head>
+<body>
+  <!-- Container -->
+  <div class="container">
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h2>Admin Dashboard</h2>
+      <button class="btn btn-warning logout-btn" onclick="adminLogout()">Logout</button>
+    </div>
+    
+    <!-- User Table -->
+    <div class="card shadow">
+      <div class="card-header text-white bg-primary">
+        <h3 class="card-title mb-0">All Users</h3>
+      </div>
+      <div class="card-body">
+        <div class="table-responsive">
+          <table class="table table-bordered table-hover">
+            <thead>
+              <tr>
+                <th>Username</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Mined Balance</th>
+                <th>Referral Balance</th>
+                <th>Referral Code</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="userTableBody">
+              <!-- Populated dynamically -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Send Message -->
+    <div class="card shadow message-box">
+      <div class="card-header text-white bg-info">
+        <h3 class="card-title mb-0">Send Message to User</h3>
+      </div>
+      <div class="card-body">
+        <div class="mb-3">
+          <label for="usernameToMessage" class="form-label">Username</label>
+          <input type="text" id="usernameToMessage" class="form-control" placeholder="Enter username">
+        </div>
+        <div class="mb-3">
+          <label for="messageContent" class="form-label">Message</label>
+          <textarea id="messageContent" class="form-control" rows="4" placeholder="Enter your message"></textarea>
+        </div>
+        <button class="btn btn-primary" onclick="sendMessage()">Send Message</button>
+      </div>
+    </div>
+
+    <!-- List All Users Section -->
+    <div class="card shadow user-details">
+      <div class="card-header text-white bg-dark">
+        <h3 class="card-title mb-0">List of All Users</h3>
+      </div>
+      <div class="card-body">
+        <div id="userDetailsList">
+          <!-- Populated dynamically -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap Bundle JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    // Fetch Users and Populate Table
+    function fetchUsers() {
+      const users = JSON.parse(localStorage.getItem('users')) || {};
+      const balances = JSON.parse(localStorage.getItem('balances')) || {};
+      const tableBody = document.getElementById('userTableBody');
+      const userDetailsList = document.getElementById('userDetailsList');
+      tableBody.innerHTML = ''; // Clear existing rows
+      userDetailsList.innerHTML = ''; // Clear existing details
+
+      for (const username in users) {
+        const user = users[username];
+        const balance = balances[username] || { mined: 0, referral: 0 };
+        
+        // Populate table
+        const row = `
+          <tr>
+            <td>${username}</td>
+            <td>${user.email}</td>
+            <td>${user.phone}</td>
+            <td>${balance.mined.toFixed(6)}</td>
+            <td>${balance.referral.toFixed(6)}</td>
+            <td>${user.referralCode || ''}</td>
+            <td>
+              <button class="btn btn-danger btn-sm" onclick="deleteUser('${username}')">Delete</button>
+            </td>
+          </tr>
+        `;
+        tableBody.innerHTML += row;
+
+        // Populate user details
+        const userDetails = `
+          <div class="mb-3">
+            <strong>Username:</strong> ${username} <br>
+            <strong>Email:</strong> ${user.email} <br>
+            <strong>Phone:</strong> ${user.phone} <br>
+            <strong>Mined Balance:</strong> ${balance.mined.toFixed(6)} <br>
+            <strong>Referral Balance:</strong> ${balance.referral.toFixed(6)} <br>
+            <strong>Referral Code:</strong> ${user.referralCode || 'N/A'} <br>
+            <hr>
+          </div>
+        `;
+        userDetailsList.innerHTML += userDetails;
+      }
+    }
+
+    // Admin Logout Functionality
+    function adminLogout() {
+      alert("Logging out...");
+      localStorage.removeItem('loggedInUser');
+      window.location.href = "index.html";
+    }
+
+    // Delete User
+    function deleteUser(username) {
+      if (confirm(`Are you sure you want to delete the account for ${username}? This action is irreversible.`)) {
+        const users = JSON.parse(localStorage.getItem('users')) || {};
+        const balances = JSON.parse(localStorage.getItem('balances')) || {};
+        delete users[username];
+        delete balances[username];
+
+        localStorage.setItem('users', JSON.stringify(users));
+        localStorage.setItem('balances', JSON.stringify(balances));
+        alert(`${username} has been deleted.`);
+        fetchUsers(); // Refresh table and details
+      }
+    }
+
+    // Send Message to User
+    function sendMessage() {
+      const username = document.getElementById('usernameToMessage').value.trim();
+      const message = document.getElementById('messageContent').value.trim();
+      const users = JSON.parse(localStorage.getItem('users')) || {};
+
+      if (!username || !message) {
+        alert('Please fill in both fields.');
+        return;
+      }
+
+      if (!users[username]) {
+        alert('User not found.');
+        return;
+      }
+
+      alert(`Message sent to ${username}: "${message}"`);
+      document.getElementById('usernameToMessage').value = '';
+      document.getElementById('messageContent').value = '';
+    }
+
+    // Initialize Table and User List on Page Load
+    window.onload = fetchUsers;
+  </script>
+  <script src="script.js"></script>
+</body>
+</html>

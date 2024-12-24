@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard - Vetax Mining App</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      background-image:url(/img/bg.avif);
+      background-size:cover;
+      background-repeat: no-repeat;
+      
+    }
+    h2{
+        color: #f7a204;
+    }
+    .navbar-custom {
+      background-color: #343a40;
+      padding: 10px;
+      border-radius: 20px;
+    }
+    .navbar-custom a {
+      color: #fff;
+      text-decoration: none;
+      padding: 0.5rem 1rem;
+    }
+    .navbar-custom a:hover {
+      color: #ffc107;
+    }
+    .container-custom {
+      margin-top: 50px;
+      background-color: #f7a20411;
+    }
+    #referralLink {
+      cursor: not-allowed;
+    }
+   button{
+    padding: 10px;
+    border-radius: 25px;
+   }
+  </style>
+</head>
+<body>
+  <!-- Navbar -->
+  <!-- <nav class="navbar navbar-custom">
+    <div class="container-fluid d-flex justify-content-between">
+      <a href="profile.html" class="navbar-brand">Profile</a>
+      <a href="index.html" id="logoutBtn" class="btn btn-warning btn-sm">Logout</a>
+      <a id="deleAccountBtn" class="btn btn-danger btn-sm">Delete Account</a>
+    
+    </div>
+  </nav>> -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#"> <h2>VETAX</h2></a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+         data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+       
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto"> 
+              <div class="welcome-message" id="welcomeMessage"></div>
+                <li class="nav-item">
+                    <a class="nav-link" href="profile.html">Profile</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="index.html" id="logoutBtn">Logout</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+  <!-- Main Content -->
+  <div class="container container-custom">
+    
+    <div class="card shadow-sm p-4">
+      <div class="mb-3">
+        <p id="miningStatus" class="text-muted fs-5">Mining not started</p>
+      </div>
+      <div class="container mb-3">
+        <p><strong>Mined Amount:</strong> <span id="minedAmount" class="text-primary fs-5">0.000000</span></p>
+      </div>
+      <div class="mb-3">
+        <p><strong>Referral Balance:</strong> <span id="referralBalance" class="text-success fs-5">0.000000</span></p>
+      </div>
+      <div class="d-grid gap-2 mb-4">
+        <button class="btn btn-primary" onclick="startMining()">Start Mining</button>
+      </div>
+      <hr>
+      <h3>Your Referral Link</h3>
+      <div class="input-group mb-3">
+        <input type="text" id="referralLink" class="form-control" readonly placeholder="Your referral link will appear here">
+        <button class="btn btn-outline-secondary" onclick="copyReferralLink()">Copy</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap Bundle JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="script.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+  
+</body>
+</html>
