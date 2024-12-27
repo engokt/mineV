@@ -47,8 +47,8 @@ function signup() {
 
             // Reward referrer
             if (referralCode && users[referralCode]) {
-                balances[referralCode].referral += 0.0900;
-                alert(`Referrer ${referralCode} rewarded with 0.0900`);
+                balances[referralCode].referral += 0.000500;
+                alert(`Referrer ${referralCode} rewarded with 0.000500`);
             }
 
             saveUsers(users);
@@ -126,7 +126,7 @@ function startMining() {
     const user = checkSession();
     const balances = getBalances();
 
-    const miningRate = 0.000569;
+    const miningRate = 0.000069;
     const miningIntervalTime = 3 * 60 * 1000; // 3 minutes
     const miningEndTime = Date.now() + 12 * 60 * 60 * 1000; // 12 hours
 
