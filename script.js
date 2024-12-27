@@ -126,7 +126,7 @@ function startMining() {
     const user = checkSession();
     const balances = getBalances();
 
-    const miningRate = 0.000069;
+    const miningRate = 0.00000069;
     const miningIntervalTime = 3 * 60 * 1000; // 3 minutes
     const miningEndTime = Date.now() + 12 * 60 * 60 * 1000; // 12 hours
 
